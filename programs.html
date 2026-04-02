@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrainingVault — Programs</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+</head>
+<body class="page-programs">
+
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">▶</span>
+      <span class="brand-name">TrainingVault</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Upload</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="programs.html" class="active">Programs</a></li>
+    </ul>
+    <div class="nav-date" id="navDate"></div>
+  </nav>
+
+  <div class="programs-header">
+    <div>
+      <h1 class="dash-title">PROGRAMS</h1>
+      <p class="dash-sub">Manage and track all training programs</p>
+    </div>
+    <button class="btn-primary" id="newProgramBtn">+ New Program</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-title">Create New Program</div>
+      <div class="form-group">
+        <label>Program Name</label>
+        <input type="text" id="progName" placeholder="e.g. 10K Race Prep" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Start Date</label>
+          <input type="date" id="progStart" />
+        </div>
+        <div class="form-group">
+          <label>Duration (weeks)</label>
+          <input type="number" id="progWeeks" placeholder="12" min="1" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="progCat">
+          <option>Endurance</option>
+          <option>Strength</option>
+          <option>HIIT</option>
+          <option>Mobility</option>
+          <option>Sport-Specific</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Description</label>
+        <textarea id="progDesc" rows="3" placeholder="Program goals and overview…"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-outline" id="modalCancel">Cancel</button>
+        <button class="btn-primary" id="modalSave">Save Program</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Bar -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="Endurance">Endurance</button>
+    <button class="filter-btn" data-filter="Strength">Strength</button>
+    <button class="filter-btn" data-filter="HIIT">HIIT</button>
+    <button class="filter-btn" data-filter="Mobility">Mobility</button>
+  </div>
+
+  <div class="programs-grid" id="programsGrid"></div>
+
+  <footer class="footer">
+    <div class="footer-brand">TrainingVault</div>
+    <div class="footer-meta">
+      <span id="footerDate"></span>
+      <span>•</span>
+      <span>Deployed via GitHub Pages</span>
+      <span>•</span>
+      <a href="https://github.com" target="_blank">View Repository</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
