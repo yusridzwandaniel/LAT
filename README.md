@@ -1,4 +1,4 @@
-# 🎬 TrainingVault
+# 🎬 Learn Apply Teach
 
 > A training video management and program monitoring platform — deployable to GitHub Pages in one push.
 
