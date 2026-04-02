@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrainingVault — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+</head>
+<body class="page-dashboard">
+
+  <!-- ─── NAV ─── -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">▶</span>
+      <span class="brand-name">TrainingVault</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Upload</a></li>
+      <li><a href="dashboard.html" class="active">Dashboard</a></li>
+      <li><a href="programs.html">Programs</a></li>
+    </ul>
+    <div class="nav-date" id="navDate"></div>
+  </nav>
+
+  <!-- ─── DASHBOARD HEADER ─── -->
+  <div class="dash-header">
+    <div>
+      <h1 class="dash-title">MONITOR</h1>
+      <p class="dash-sub">Live GitHub pipeline status &amp; training analytics</p>
+    </div>
+    <div class="dash-status">
+      <span class="status-dot pulse"></span>
+      <span class="status-text">All Systems Operational</span>
+    </div>
+  </div>
+
+  <!-- ─── KPI ROW ─── -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-icon">⬆</div>
+      <div class="kpi-val" data-count="247">0</div>
+      <div class="kpi-label">Total Uploads</div>
+      <div class="kpi-delta positive">+12 this week</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">▶</div>
+      <div class="kpi-val" data-count="18">0</div>
+      <div class="kpi-label">Active Programs</div>
+      <div class="kpi-delta positive">+2 this month</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">◉</div>
+      <div class="kpi-val">99.4<span style="font-size:1.2rem">%</span></div>
+      <div class="kpi-label">Uptime (30 days)</div>
+      <div class="kpi-delta neutral">Stable</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon">⌛</div>
+      <div class="kpi-val" data-count="1204">0</div>
+      <div class="kpi-label">Hours Logged</div>
+      <div class="kpi-delta positive">+48h this week</div>
+    </div>
+  </div>
+
+  <!-- ─── CHARTS ROW ─── -->
+  <div class="charts-row">
+
+    <!-- Bar Chart: Weekly Uploads -->
+    <div class="chart-card wide">
+      <div class="chart-title">Weekly Upload Activity <span class="chart-period">Last 8 Weeks</span></div>
+      <div class="bar-chart" id="barChart"></div>
+      <div class="bar-labels" id="barLabels"></div>
+    </div>
+
+    <!-- Donut: Program Distribution -->
+    <div class="chart-card">
+      <div class="chart-title">Program Distribution</div>
+      <div class="donut-wrap">
+        <svg class="donut" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" id="donutSvg"></svg>
+        <div class="donut-center" id="donutCenter">
+          <span class="dc-num">18</span>
+          <span class="dc-label">programs</span>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <!-- ─── GITHUB PIPELINE ─── -->
+  <div class="section-card">
+    <div class="section-card-title">GitHub Actions Pipeline</div>
+    <div class="pipeline" id="pipeline"></div>
+  </div>
+
+  <!-- ─── ACTIVITY CALENDAR ─── -->
+  <div class="section-card">
+    <div class="section-card-title">Upload Activity — <span id="calYear"></span></div>
+    <div class="calendar-wrap">
+      <div class="cal-months" id="calMonths"></div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+    <div class="cal-legend">
+      <span>Less</span>
+      <span class="cal-leg-box" style="--l:0"></span>
+      <span class="cal-leg-box" style="--l:1"></span>
+      <span class="cal-leg-box" style="--l:2"></span>
+      <span class="cal-leg-box" style="--l:3"></span>
+      <span class="cal-leg-box" style="--l:4"></span>
+      <span>More</span>
+    </div>
+  </div>
+
+  <!-- ─── RECENT ACTIVITY FEED ─── -->
+  <div class="section-card">
+    <div class="section-card-title">Recent Activity</div>
+    <div class="activity-feed" id="activityFeed"></div>
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="footer-brand">TrainingVault</div>
+    <div class="footer-meta">
+      <span id="footerDate"></span>
+      <span>•</span>
+      <span>Deployed via GitHub Pages</span>
+      <span>•</span>
+      <a href="https://github.com" target="_blank">View Repository</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
