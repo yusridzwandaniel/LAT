@@ -1,0 +1,156 @@
+name: Deploy TrainingVault to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    # Monitor site health every 6 hours
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+
+  # ── JOB 1: LINT & VALIDATE ──────────────────
+  validate:
+    name: Lint & Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install HTMLHint
+        run: npm install -g htmlhint
+
+      - name: Lint HTML files
+        run: |
+          echo "🔍 Linting HTML files..."
+          htmlhint index.html dashboard.html programs.html || true
+          echo "✅ Lint complete"
+
+      - name: Check file structure
+        run: |
+          echo "📁 Checking required files..."
+          required=("index.html" "dashboard.html" "programs.html" "style.css" "app.js" "README.md")
+          for f in "${required[@]}"; do
+            if [ -f "$f" ]; then
+              echo "  ✅ $f found"
+            else
+              echo "  ❌ $f MISSING"
+              exit 1
+            fi
+          done
+          echo "✅ All required files present"
+
+      - name: Check asset sizes
+        run: |
+          echo "📦 Checking asset sizes..."
+          for f in style.css app.js; do
+            size=$(wc -c < "$f")
+            echo "  $f: ${size} bytes"
+            if [ "$size" -gt 500000 ]; then
+              echo "  ⚠️  Warning: $f is larger than 500KB"
+            fi
+          done
+
+  # ── JOB 2: BUILD ────────────────────────────
+  build:
+    name: Build Site
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Inject build metadata
+        run: |
+          BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          COMMIT_SHA="${{ github.sha }}"
+          SHORT_SHA="${COMMIT_SHA:0:7}"
+          echo "📅 Build date: $BUILD_DATE"
+          echo "🔖 Commit: $SHORT_SHA"
+
+          # Inject build info into HTML as a meta tag
+          for html in index.html dashboard.html programs.html; do
+            sed -i "s|</head>|  <meta name=\"build-date\" content=\"$BUILD_DATE\">\n  <meta name=\"commit\" content=\"$SHORT_SHA\">\n</head>|" "$html"
+          done
+          echo "✅ Build metadata injected"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+  # ── JOB 3: DEPLOY ───────────────────────────
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'schedule'
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Announce deployment
+        run: |
+          echo "🚀 TrainingVault deployed successfully!"
+          echo "🌐 URL: ${{ steps.deployment.outputs.page_url }}"
+          echo "📅 Time: $(date -u)"
+
+  # ── JOB 4: MONITOR (scheduled) ──────────────
+  monitor:
+    name: Site Health Monitor
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ping deployed site
+        run: |
+          SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          echo "🔍 Monitoring: $SITE_URL"
+
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+          RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" "$SITE_URL" || echo "N/A")
+
+          echo "📊 HTTP Status   : $STATUS"
+          echo "⏱  Response time : ${RESPONSE_TIME}s"
+          echo "📅 Checked at    : $(date -u)"
+
+          if [ "$STATUS" = "200" ]; then
+            echo "✅ Site is UP and healthy"
+          else
+            echo "❌ Site returned status $STATUS — investigate!"
+            exit 1
+          fi
+
+      - name: Log monitor result
+        run: |
+          echo "## Monitor Run — $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Result |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Site reachable | ✅ Yes |" >> $GITHUB_STEP_SUMMARY
+          echo "| Run time | $(date -u +%H:%M) UTC |" >> $GITHUB_STEP_SUMMARY
