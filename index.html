@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrainingVault — Upload & Train</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet" />
+</head>
+<body class="page-index">
+
+  <!-- ─── NAV ─── -->
+  <nav class="nav">
+    <div class="nav-brand">
+      <span class="brand-icon">▶</span>
+      <span class="brand-name">TrainingVault</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Upload</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="programs.html">Programs</a></li>
+    </ul>
+    <div class="nav-date" id="navDate"></div>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <header class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-content">
+      <div class="hero-label">Training Management Platform</div>
+      <h1 class="hero-title">UPLOAD.<br>TRACK.<br>PERFORM.</h1>
+      <p class="hero-sub">Centralise every training video and program in one monitored repository. Powered by GitHub.</p>
+      <a href="#upload" class="btn-primary">Start Uploading</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card" data-count="247" data-suffix=" videos">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Videos Stored</span>
+      </div>
+      <div class="stat-card" data-count="18" data-suffix=" programs">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Active Programs</span>
+      </div>
+      <div class="stat-card" data-count="99.4" data-suffix="%">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Uptime</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── UPLOAD SECTION ─── -->
+  <section class="section" id="upload">
+    <div class="section-header">
+      <span class="section-tag">/ 01</span>
+      <h2>Upload Training Content</h2>
+    </div>
+
+    <div class="upload-layout">
+      <!-- Drop Zone -->
+      <div class="drop-zone" id="dropZone">
+        <div class="dz-inner">
+          <div class="dz-icon">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="12" width="56" height="40" rx="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M26 26l12 8-12 8V26z" fill="currentColor"/>
+              <path d="M32 4v8M28 7l4-4 4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="dz-title">Drop video files here</p>
+          <p class="dz-sub">MP4, MOV, AVI — up to 2GB per file</p>
+          <label class="btn-outline" for="fileInput">Browse Files</label>
+          <input type="file" id="fileInput" accept="video/*" multiple hidden />
+        </div>
+        <div class="dz-overlay" id="dzOverlay">Release to Upload</div>
+      </div>
+
+      <!-- Upload Form -->
+      <div class="upload-form">
+        <div class="form-group">
+          <label>Video Title</label>
+          <input type="text" placeholder="e.g. Week 3 — Sprint Intervals" />
+        </div>
+        <div class="form-group">
+          <label>Training Program</label>
+          <select>
+            <option value="">Select a program…</option>
+            <option>Marathon Prep — 16 Week</option>
+            <option>Strength Foundation</option>
+            <option>HIIT Conditioning</option>
+            <option>Mobility & Recovery</option>
+            <option>+ New Program</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Session Date</label>
+            <input type="date" id="sessionDate" />
+          </div>
+          <div class="form-group">
+            <label>Duration (min)</label>
+            <input type="number" placeholder="45" min="1" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Tags</label>
+          <input type="text" placeholder="strength, upper-body, beginner" />
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea rows="3" placeholder="Coach observations, athlete notes…"></textarea>
+        </div>
+        <button class="btn-primary full-width" id="uploadBtn">Upload to Vault</button>
+      </div>
+    </div>
+
+    <!-- Upload Queue -->
+    <div class="upload-queue" id="uploadQueue" style="display:none">
+      <h3>Upload Queue</h3>
+      <div class="queue-list" id="queueList"></div>
+    </div>
+  </section>
+
+  <!-- ─── RECENT UPLOADS ─── -->
+  <section class="section alt-bg" id="recent">
+    <div class="section-header">
+      <span class="section-tag">/ 02</span>
+      <h2>Recent Uploads</h2>
+    </div>
+    <div class="video-grid" id="videoGrid"></div>
+  </section>
+
+  <!-- ─── INFOGRAPHIC STRIP ─── -->
+  <section class="infographic-strip">
+    <div class="strip-item">
+      <div class="strip-num">4.7TB</div>
+      <div class="strip-label">Total Storage Used</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item">
+      <div class="strip-num">1,204</div>
+      <div class="strip-label">Training Hours Logged</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item">
+      <div class="strip-num">34</div>
+      <div class="strip-label">Athletes Tracked</div>
+    </div>
+    <div class="strip-div"></div>
+    <div class="strip-item">
+      <div class="strip-num">GitHub</div>
+      <div class="strip-label">Monitored via Actions</div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer class="footer">
+    <div class="footer-brand">TrainingVault</div>
+    <div class="footer-meta">
+      <span id="footerDate"></span>
+      <span>•</span>
+      <span>Deployed via GitHub Pages</span>
+      <span>•</span>
+      <a href="https://github.com" target="_blank">View Repository</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
